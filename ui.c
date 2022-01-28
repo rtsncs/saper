@@ -1,3 +1,4 @@
+/* Dominik Brzeziński */
 #include "board.h"
 #include <math.h>
 #include <ncurses.h>

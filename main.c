@@ -1,3 +1,4 @@
+/* Dominik Brzeziński */
 #include "board.h"
 #include "colors.h"
 #include "input.h"

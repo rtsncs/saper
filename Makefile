@@ -1,3 +1,4 @@
+# Dominik Brzeziński
 CFLAGS = -Wall -ansi
 CC = gcc
 LDFLAGS = -lncurses -lm

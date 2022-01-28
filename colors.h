@@ -1,3 +1,4 @@
+/* Dominik Brzeziński */
 #ifndef COLORS_HEADER
 #define COLORS_HEADER
 #include <ncurses.h>

@@ -1,3 +1,4 @@
+/* Dominik Brzeziński */
 #ifndef INPUT_HEADER
 #define INPUT_HEADER
 #include "board.h"

@@ -1,3 +1,4 @@
+/* Dominik Brzeziński */
 #ifndef BOARD_HEADER
 #define BOARD_HEADER
 #include <ncurses.h>

@@ -1,3 +1,4 @@
+/* Dominik Brzeziński */
 #ifndef UI_HEADER
 #define UI_HEADER
 #include <ncurses.h>
