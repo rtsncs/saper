@@ -57,73 +57,78 @@ Sterowanie:\n\
     int menu_state = 0; /* 0 - hidden 1 - width 2 - height 3 - mines 4 preset 5
                            - ok 6 - cancel*/
     double timer = 0;
+    int mines_left = mines;
     struct timeval now;
     struct timeval wait;
     wait.tv_sec = 0;
     wait.tv_usec = 1000000 / REFRESH_RATE;
     wattron(ui_win, A_REVERSE);
     srand(time(NULL));
-    while (true) {
-        c = getch();
-        if (c == 'q' || c == 'Q') {
-            break;
-        }
+    ungetch(-2);
 
-        if ((c == 'n' || c == 'N') && !menu_state) {
-            if (board.game_state == WON || board.game_state == BOOM) {
-                menu_state = 5;
-            } else {
-                menu_state = 6;
+    while ((c = getch())) {
+        if (c != ERR) {
+            if (c == 'q' || c == 'Q') {
+                break;
             }
-        }
 
-        if (lines != LINES || cols != COLS) {
+            if ((c == 'n' || c == 'N') && !menu_state) {
+                if (board.game_state == WON || board.game_state == BOOM) {
+                    menu_state = 5;
+                } else {
+                    menu_state = 6;
+                }
+            }
+
+            if (menu_state) {
+                if ((menu_state == 5 || menu_state == 6) && c == '\n') {
+                    if (menu_state == 5) {
+                        if (preset != 3) {
+                            width = presets[preset][0];
+                            height = presets[preset][1];
+                            mines = presets[preset][2];
+                        }
+                        timer = 0;
+                        free(board.cells);
+                        board = new_board(width, height, mines);
+                        wresize(game_win, height, width * 2);
+                        mvwin(game_win, (lines / 2.) - (height / 2.),
+                              (cols / 2.) - width);
+                        erase();
+                    } else {
+                        width = board.width;
+                        height = board.height;
+                        mines = board.mines;
+                    }
+                    menu_state = 0;
+                    ungetch(-2);
+                } else {
+                    draw_menu(menu_win, &width, &height, &mines, &menu_state,
+                              &preset, c);
+                }
+            } else {
+                if ((board.game_state != WON && board.game_state != BOOM)) {
+                    handle_input(c, &board, game_win);
+                    if (board.mines == board.covered)
+                        board.game_state = WON;
+                }
+                draw_board(&board, game_win);
+                mines_left = board.mines - board.flags;
+            }
+        } else if (lines != LINES || cols != COLS) {
             lines = LINES;
             cols = COLS;
             mvwin(game_win, (lines / 2.) - (height / 2.), (cols / 2.) - width);
             mvwin(ui_win, lines - 1, 0);
             mvwin(menu_win, (lines / 2.) - 4, (cols / 2.) - 9);
             erase();
+            ungetch(-2);
         }
-        if (menu_state) {
-            if ((menu_state == 5 || menu_state == 6) && c == '\n') {
-                if (menu_state == 5) {
-                    if (preset != 3) {
-                        width = presets[preset][0];
-                        height = presets[preset][1];
-                        mines = presets[preset][2];
-                    }
-                    timer = 0;
-                    free(board.cells);
-                    board = new_board(width, height, mines);
-                    wresize(game_win, height, width * 2);
-                    mvwin(game_win, (lines / 2.) - (height / 2.),
-                          (cols / 2.) - width);
-                    erase();
-                } else {
-                    width = board.width;
-                    height = board.height;
-                    mines = board.mines;
-                }
-                menu_state = 0;
-            } else {
-                draw_menu(menu_win, &width, &height, &mines, &menu_state,
-                          &preset, c);
-            }
-        } else {
-            if (board.game_state == STARTED) {
-                gettimeofday(&now, NULL);
-                double now_ms = now.tv_sec + (now.tv_usec / 1000000.);
-                timer = now_ms - board.start_time;
-            }
-            if ((board.game_state != WON && board.game_state != BOOM)) {
-                handle_input(c, &board, game_win);
-                if (board.mines == board.covered)
-                    board.game_state = WON;
-            }
-            draw_board(&board, game_win);
-            int mines = board.mines - board.flags;
-            draw_ui(ui_win, timer, mines, board.game_state);
+        if (board.game_state == STARTED) {
+            gettimeofday(&now, NULL);
+            double now_ms = now.tv_sec + (now.tv_usec / 1000000.);
+            timer = now_ms - board.start_time;
+            draw_ui(ui_win, timer, mines_left, board.game_state);
         }
         select(0, NULL, NULL, NULL, &wait);
     }
