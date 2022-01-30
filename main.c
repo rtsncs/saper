@@ -30,13 +30,15 @@ int main(int argc, char **argv) {
         (strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0)) {
         printf("\
 Saper\n\
+Celem gry jest odkrycie wszystkich pól, na których nie ma min.\n\
 Sterowanie:\n\
 \tporuszanie się - hjkl lub strzałki\n\
 \todkrywanie pól - enter lub lewy przycisk myszy\n\
 \todkrywanie pól dookoła - spacja lub środkowy przycisk myszy\n\
 \tstawianie flag - f lub prawy przycisk myszy\n\
 \tn - nowa gra\n\
-\tq - wyjście\n");
+\tq - wyjście\n\
+Rozmiar planszy i ilość min można dostosować w menu pod klawiszem 'n'.\n");
         return 0;
     }
     init();
