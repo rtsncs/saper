@@ -128,8 +128,8 @@ Sterowanie:\n\
             gettimeofday(&now, NULL);
             double now_ms = now.tv_sec + (now.tv_usec / 1000000.);
             timer = now_ms - board.start_time;
-            draw_ui(ui_win, timer, mines_left, board.game_state);
         }
+        draw_ui(ui_win, timer, mines_left, board.game_state);
         select(0, NULL, NULL, NULL, &wait);
     }
     free(board.cells);
