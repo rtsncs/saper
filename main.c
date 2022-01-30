@@ -48,11 +48,10 @@ Sterowanie:\n\
     int width = presets[preset][0];
     int height = presets[preset][1];
     int mines = presets[preset][2];
-
-    WINDOW *game_win = newwin(height, width * 2, (lines / 2) - (height / 2),
+    WINDOW *game_win = newwin(height, width * 2., (lines / 2.) - (height / 2.),
                               (cols / 2) - (width));
     WINDOW *ui_win = newwin(0, 0, lines - 1, 0);
-    WINDOW *menu_win = newwin(8, 18, (lines / 2) - 4, (cols / 2) - 9);
+    WINDOW *menu_win = newwin(8, 18, (lines / 2.) - 4, (cols / 2.) - 9);
     board_t board = new_board(width, height, mines);
     int c;
     int menu_state = 0; /* 0 - hidden 1 - width 2 - height 3 - mines 4 preset 5
@@ -81,9 +80,9 @@ Sterowanie:\n\
         if (lines != LINES || cols != COLS) {
             lines = LINES;
             cols = COLS;
-            mvwin(game_win, (lines / 2) - (height / 2), (cols / 2) - width);
+            mvwin(game_win, (lines / 2.) - (height / 2.), (cols / 2.) - width);
             mvwin(ui_win, lines - 1, 0);
-            mvwin(menu_win, (lines / 2) - 9, (cols / 2) - 2);
+            mvwin(menu_win, (lines / 2.) - 4, (cols / 2.) - 9);
             erase();
         }
         if (menu_state) {
@@ -98,8 +97,8 @@ Sterowanie:\n\
                     free(board.cells);
                     board = new_board(width, height, mines);
                     wresize(game_win, height, width * 2);
-                    mvwin(game_win, (lines / 2) - (height / 2),
-                          (cols / 2) - width);
+                    mvwin(game_win, (lines / 2.) - (height / 2.),
+                          (cols / 2.) - width);
                     erase();
                 } else {
                     width = board.width;
